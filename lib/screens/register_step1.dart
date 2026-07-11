@@ -11,6 +11,8 @@ import 'package:four_wheels/services/AuthService.dart';
 import '../services/google_auth.dart';
 import 'package:four_wheels/models/GoogleAuth_model.dart';
 import 'dash_bord.dart';
+import 'package:get/get.dart';
+import 'package:four_wheels/controller/auth_controller.dart';
 
 class RegisterStep1 extends StatefulWidget {
   RegisterStep1({super.key});
@@ -19,37 +21,10 @@ class RegisterStep1 extends StatefulWidget {
   State<RegisterStep1> createState() => _RegisterStep1State();
 }
 class _RegisterStep1State extends State<RegisterStep1>{
-  final _formKey = GlobalKey<FormState>();
+  final AuthController authController = Get.isRegistered<AuthController>()
+      ? Get.find<AuthController>()
+      : Get.put(AuthController(), permanent: true);
 
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-
-  String? validateFullName(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Full name is required';
-    }
-    if (value.length > 12) {
-      return 'Max 12 characters';
-    }
-    final nameRegex = RegExp(r'^[a-zA-Z]{1,12}$');
-
-    if (!nameRegex.hasMatch(value)) {
-      return 'Must start with a letter';
-    }
-
-    return null;
-  }
-
-  String? validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Email is required';
-    }
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(value.trim())) {
-      return 'Invalid email';
-    }
-    return null;
-  }
   bool isLoding = false;
 
   @override
@@ -124,7 +99,7 @@ class _RegisterStep1State extends State<RegisterStep1>{
               child:SingleChildScrollView(
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 28, vertical: 22),
+                 EdgeInsets.symmetric(horizontal: 28, vertical: 22),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -137,7 +112,7 @@ class _RegisterStep1State extends State<RegisterStep1>{
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                     SizedBox(height: 8),
 
                     Text(
                       "Join the kinetic horizon of premium\ntravel.",
@@ -184,7 +159,7 @@ class _RegisterStep1State extends State<RegisterStep1>{
                     const SizedBox(height: 20),
 
                     Form(
-                      key: _formKey,
+                      key: authController.step1FormKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -198,8 +173,8 @@ class _RegisterStep1State extends State<RegisterStep1>{
                           const SizedBox(height: 8),
                           CustomTextField(
                             hint: "Shahd Alaoul",
-                            controller: nameController,
-                            validator: validateFullName,
+                            controller: authController.nameController,
+                            validator: authController.validateFullName,
                             icon: Icons.person_outline,
                             keyboardType: TextInputType.text,
                           ),
@@ -216,8 +191,8 @@ class _RegisterStep1State extends State<RegisterStep1>{
                           const SizedBox(height: 8),
                           CustomTextField(
                             hint: "example@gmail.com",
-                            controller: emailController,
-                            validator: validateEmail,
+                            controller: authController.emailController,
+                            validator: authController.validateEmail,
                             icon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
                           ),
@@ -228,24 +203,12 @@ class _RegisterStep1State extends State<RegisterStep1>{
 
                           Center(
                             child: CustomButton(
+                              textcolor: Colors.white,
                               text: "Next step",
                               width: 326,
                               height: 64,
                               icon: Icons.arrow_forward,
-                              onTap: () {
-                                if (_formKey.currentState!.validate()) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>  RegisterStep2(
-                                        name: nameController.text.trim(),
-                                        email: emailController.text.trim(),
-
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
+                              onTap: authController.goToStep2,
                             ),
                           ),
                         ],
@@ -264,53 +227,7 @@ class _RegisterStep1State extends State<RegisterStep1>{
                         SocialButton(
                           icon: Icons.g_mobiledata,
                           text: "Google",
-                          onTap: () async {
-                            if (isLoding) return;
-                            setState(() {
-                              isLoding = true;
-                            });
-                            try {
-                              final token = await GoogleAuthService.signInAndGetIdToken();
-                              print("token from google:$token");
-
-                              if (token == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Google sign-in failed')),
-                                );
-                                return;
-                              }
-
-                              final user = GoogleAuthModel(token: token);
-
-                              final result = await AuthService.googleLogin(user);
-                              print(result);
-                              if (result != null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(result['message'] ??
-                                      "done google login")),
-                                );
-
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => DashbordScreen(),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(result['message'] ??
-                                      "filed google login")),
-                                );
-                              }
-                            } catch (e) {
-                              print("error=$e");
-                            } finally {
-                              setState(() {
-                                isLoding = false;
-                              });
-                            }
-                          }
+                          onTap: authController.googleLogin,
                         ),
 
                       ],
@@ -332,12 +249,7 @@ class _RegisterStep1State extends State<RegisterStep1>{
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => LoginScreen(),
-                                ),
-                              );
+                              Get.to(() => LoginScreen());
                             },
                             child: Text(
                               "Login",

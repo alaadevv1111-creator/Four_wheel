@@ -1,106 +1,105 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-class DashboardPrimaryCard extends StatelessWidget {
-  final double? width;
-  final double? height;
+import 'package:four_wheels/constants/colors.dart';
+class RevenueCard extends StatelessWidget {
+  final String amount;
   final String title;
-  final String value;
   final IconData icon;
-  final Widget? child;
-  final EdgeInsetsGeometry padding;
-  final List<Color> gradientColors;
-  final BorderRadiusGeometry borderRadius;
-  final Color titleColor;
-  final Color valueColor;
-  final Color iconBackgroundColor;
-  final Color iconColor;
+  final String middleWave;
+  final String sideWave;
 
-  const DashboardPrimaryCard({
+  const RevenueCard({
     super.key,
-    this.width,
-    this.height,
+    required this.amount,
     required this.title,
-    required this.value,
     required this.icon,
-    this.child,
-    this.padding = const EdgeInsets.all(18),
-    this.gradientColors = const [
-      Color(0xff111C34),
-      Color(0xff55637E),
-    ],
-    this.borderRadius = const BorderRadius.all(Radius.circular(22)),
-    this.titleColor = Colors.white70,
-    this.valueColor = Colors.white,
-    this.iconBackgroundColor = const Color.fromRGBO(255, 255, 255, .12),
-    this.iconColor = Colors.white,
+    required this.middleWave,
+    required this.sideWave,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width ?? double.infinity,
-      height: height,
-      padding: padding,
-      decoration: BoxDecoration(
-        borderRadius: borderRadius,
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: gradientColors,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.10),
-            blurRadius: 14,
-            offset: const Offset(0, 8),
-          ),
-        ],
+    return Card(
+      elevation: 8,
+      shadowColor: Colors.black.withOpacity(0.18),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      child: Container(
+        height: 180,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColor.cardprim,
+              AppColor.cardprim2,
+            ],
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Stack(
             children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: iconBackgroundColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  icon,
-                  color: iconColor,
-                  size: 20,
+              Positioned(
+                left: 22,
+                right: 40,
+                bottom: 20,
+
+                child: Image.asset(
+                  middleWave,
+                  height: 60,
+                  fit: BoxFit.fill,
                 ),
               ),
-              const Spacer(),
-              Text(
-                title.toUpperCase(),
-                style: GoogleFonts.poppins(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: titleColor,
-                  letterSpacing: 1,
+
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Image.asset(
+                  sideWave,
+                  width: 120,
+                  fit: BoxFit.contain,
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.all(22),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(icon, color: Colors.white, size: 30),
+                     Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          title.toUpperCase(),
+                          style:  TextStyle(
+                            color: Color(0xff9CA3AF),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                         SizedBox(height: 8),
+                        Text(
+                          amount,
+                          style:  TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            value,
-            style: GoogleFonts.poppins(
-              fontSize: 32,
-              fontWeight: FontWeight.w800,
-              color: valueColor,
-            ),
-          ),
-          if (child != null) ...[
-            const SizedBox(height: 14),
-            child!,
-          ],
-        ],
+        ),
       ),
     );
   }

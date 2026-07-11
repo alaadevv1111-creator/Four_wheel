@@ -8,6 +8,9 @@ import '../widgets/curved_continer.dart';
 import '../widgets/DrivingLicense.dart';
 import 'package:four_wheels/models/register_model.dart';
 import 'package:four_wheels/services/AuthService.dart';
+import 'package:get/get.dart';
+import 'package:four_wheels/controller/auth_controller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegisterStep2 extends StatefulWidget {
   final String name;
@@ -17,7 +20,6 @@ class RegisterStep2 extends StatefulWidget {
     super.key,
     required this.name,
     required this.email,
-
   });
 
   @override
@@ -25,46 +27,9 @@ class RegisterStep2 extends StatefulWidget {
 }
 
 class _RegisterStep2State extends State<RegisterStep2> {
-  final _formKey = GlobalKey<FormState>();
-
-  final passwordController = TextEditingController();
-  final passwordConfirmController = TextEditingController();
-
-  String? validatePassword(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Password is required';
-    }
-    if (value.length < 8) {
-      return 'Password must lentgh >8 ';
-    }
-    final passwordRegex = RegExp(
-      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$',
-    );
-
-  if (!passwordRegex.hasMatch(value)) {
-    return 'Password must contain:\nUppercase, lowercase, number & symbol';
-  }
-
-  return null;
-}
-
-  String? validateConfirmPassword(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Confirm password is required';
-    }
-
-    if (value != passwordController.text) {
-      return "Password isnt mutch";
-    }
-    return null;
-  }
-
-  @override
-  void dispose() {
-    passwordController.dispose();
-    passwordConfirmController.dispose();
-    super.dispose();
-  }
+  final AuthController authController = Get.isRegistered<AuthController>()
+      ? Get.find<AuthController>()
+      : Get.put(AuthController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -83,22 +48,22 @@ class _RegisterStep2State extends State<RegisterStep2> {
             left: 0,
             right: 0,
             child: SizedBox(
-              height: 260,
+              height: 260.h,
               child: Stack(
                 children: [
                   Positioned(
-                    top: 85,
+                    top: 85.h,
                     right: 0,
                     child: Image.asset(
                       "assets/images/car.png",
-                      width: 497,
-                      height: 277,
+                      width: 497.w,
+                      height: 277.h,
                       fit: BoxFit.fill,
                     ),
                   ),
                   Positioned(
-                    top: 70,
-                    left: 35,
+                    top: 70.h,
+                    left: 35.w,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -106,16 +71,16 @@ class _RegisterStep2State extends State<RegisterStep2> {
                           "Four Wheels",
                           style: GoogleFonts.poppins(
                             color: Colors.white,
-                            fontSize: 40,
+                            fontSize: 40.sp,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h),
                         Text(
                           "L U X U R Y   I N   M O T I O N",
                           style: GoogleFonts.poppins(
                             color: AppColor.textGrey,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             letterSpacing: 3,
                           ),
                         ),
@@ -128,226 +93,202 @@ class _RegisterStep2State extends State<RegisterStep2> {
           ),
 
           Positioned(
-            top: 190,
+            top: 190.h,
             left: 0,
             right: 0,
             child: CustomTopContainer(
               width: double.infinity,
-              height: 804,
-              child:SingleChildScrollView(
-              child: Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 28, vertical: 22),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Create account",
-                        style: GoogleFonts.poppins(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                          color: AppColor.txtColor2,
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      Text(
-                        "Join the kinetic horizon of premium\ntravel.",
-                        style: GoogleFonts.manrope(
-                          fontSize: 16,
-                          color: AppColor.iconColor,
-                          height: 1.5,
-                        ),
-                      ),
-
-                      const SizedBox(height: 18),
-
-                      Text(
-                        "STEP 2 OF 2",
-                        style: GoogleFonts.manrope(
-                          fontSize: 12,
-                          color: AppColor.buttonColor,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 2,
-                        ),
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 4,
-                              color: AppColor.backtxt,
-                            ),
+              height: 804.h,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 22.h),
+                  child: Form(
+                    key: authController.step2FormKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Create account",
+                          style: GoogleFonts.poppins(
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.w800,
+                            color: AppColor.txtColor2,
                           ),
-                          Container(
-                            width: 150,
-                            height: 4,
-                            decoration: BoxDecoration(
-                              color: AppColor.buttonColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                        ),
+
+                        SizedBox(height: 8.h),
+
+                        Text(
+                          "Join the kinetic horizon of premium\ntravel.",
+                          style: GoogleFonts.manrope(
+                            fontSize: 16.sp,
+                            color: AppColor.iconColor,
+                            height: 1.5,
                           ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      Text(
-                        "PASSWORD",
-                        style: GoogleFonts.manrope(
-                          fontSize: 12,
-                          color: AppColor.textLight,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.4,
                         ),
-                      ),
 
-                      const SizedBox(height: 8),
+                        SizedBox(height: 18.h),
 
-                      CustomTextField(
-                        hint: ".......",
-                        width: 326,
-                        height: 64,
-                        isPassword: true,
-                        icon: Icons.lock_outline,
-                        controller: passwordController,
-                        validator: validatePassword
-
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      Text(
-                        "PASSWORD CONFIRM",
-                        style: GoogleFonts.manrope(
-                          fontSize: 12,
-                          color: AppColor.textLight,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.4,
+                        Text(
+                          "STEP 2 OF 2",
+                          style: GoogleFonts.manrope(
+                            fontSize: 12.sp,
+                            color: AppColor.buttonColor,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 2,
+                          ),
                         ),
-                      ),
 
-                      const SizedBox(height: 8),
+                        SizedBox(height: 10.h),
 
-                      CustomTextField(
-                        hint: ".............",
-                        width: 326,
-                        height: 64,
-                        isPassword: true,
-                        icon: Icons.verified_user_outlined,
-                        controller: passwordConfirmController,
-                        validator: validateConfirmPassword,
-
-
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      Text(
-                        "DRIVING LICENSE",
-                        style: GoogleFonts.manrope(
-                          fontSize: 12,
-                          color: AppColor.textLight,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.4,
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: AppColor.backtxt,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           children: [
-                            Text(
-                              "Do you currently hold a valid\ninternational or local driving permit?",
-                              style: GoogleFonts.manrope(
-                                fontSize: 14,
-                                color: AppColor.iconColor,
-                                height: 1.5,
+                            Expanded(
+                              child: Container(
+                                height: 4.h,
+                                color: AppColor.backtxt,
                               ),
                             ),
-                            const SizedBox(height: 14),
-                            const Center(
-                              child: DrivingLicense(),
+                            Container(
+                              width: 150.w,
+                              height: 4.h,
+                              decoration: BoxDecoration(
+                                color: AppColor.buttonColor,
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
                             ),
                           ],
                         ),
-                      ),
 
-                      const SizedBox(height: 24),
+                        SizedBox(height: 20.h),
 
-                      Center(
-                        child: CustomButton(
-                          text: "Complete Registration",
-                          width: 290,
-                          height: 58,
-                          icon: Icons.arrow_forward,
-                          onTap: () async{
-                            if (_formKey.currentState!.validate()) {
-                              final user = RegisterModel(
+                        Text(
+                          "PASSWORD",
+                          style: GoogleFonts.manrope(
+                            fontSize: 12.sp,
+                            color: AppColor.textLight,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.4,
+                          ),
+                        ),
+
+                        SizedBox(height: 8.h),
+
+                        CustomTextField(
+                          hint: ".......",
+                          width: 326.w,
+                          height: 64.h,
+                          isPassword: true,
+                          icon: Icons.lock_outline,
+                          controller: authController.passwordController,
+                          validator: authController.validatePassword,
+                        ),
+
+                        SizedBox(height: 16.h),
+
+                        Text(
+                          "PASSWORD CONFIRM",
+                          style: GoogleFonts.manrope(
+                            fontSize: 12.sp,
+                            color: AppColor.textLight,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.4,
+                          ),
+                        ),
+
+                        SizedBox(height: 8.h),
+
+                        CustomTextField(
+                          hint: ".............",
+                          width: 326.w,
+                          height: 64.h,
+                          isPassword: true,
+                          icon: Icons.verified_user_outlined,
+                          controller: authController.passwordConfirmController,
+                          validator: authController.validateConfirmPassword,
+                        ),
+
+                        SizedBox(height: 16.h),
+
+                        Text(
+                          "DRIVING LICENSE",
+                          style: GoogleFonts.manrope(
+                            fontSize: 12.sp,
+                            color: AppColor.textLight,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.4,
+                          ),
+                        ),
+
+                        // SizedBox(height: 8.h),
+                        //
+                        // Container(
+                        //   padding: EdgeInsets.all(14.w),
+                        //   decoration: BoxDecoration(
+                        //     color: AppColor.backtxt,
+                        //     borderRadius: BorderRadius.circular(24.r),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       Text(
+                        //         "Do you currently hold a valid\ninternational or local driving permit?",
+                        //         style: GoogleFonts.manrope(
+                        //           fontSize: 14.sp,
+                        //           color: AppColor.iconColor,
+                        //           height: 1.5,
+                        //         ),
+                        //       ),
+                        //       SizedBox(height: 14.h),
+                        //       const Center(
+                        //         child: DrivingLicense(),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+
+                        SizedBox(height: 24.h),
+
+                        Center(
+                          child: CustomButton(
+                            textcolor: Colors.white,
+                            text: "Complete Registration",
+                            width: 290.w,
+                            height: 58.h,
+                            icon: Icons.arrow_forward,
+                            onTap: () {
+                              authController.register(
                                 name: widget.name,
                                 email: widget.email,
-                                password: passwordController.text.trim(),
-                                passwordConfirmation: passwordConfirmController.text.trim(),
                               );
-
-                              final result = await AuthService.register(user);
-
-                              if (result?['success']== true) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => DashbordScreen()),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(result?['message'] ?? 'somthing wrong')),
-                                );
-                              }
-                                 }
-                          },
+                            },
+                          ),
                         ),
-                      ),
 
-                      const SizedBox(height: 18),
+                        SizedBox(height: 18.h),
 
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            "← RETURN TO STEP 1",
-                            style: GoogleFonts.manrope(
-                              color: AppColor.textHint,
-                              fontSize: 14,
-                              letterSpacing: 1.2,
-                              fontWeight: FontWeight.w600,
+                        Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.back();
+                            },
+                            child: Text(
+                              "← RETURN TO STEP 1",
+                              style: GoogleFonts.manrope(
+                                color: AppColor.textHint,
+                                fontSize: 14.sp,
+                                letterSpacing: 1.2,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-
-
-
-
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
           ),
         ],
       ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/colors.dart';
 
 class DrivingLicense extends StatefulWidget {
   const DrivingLicense({super.key});
 
   @override
-  State<DrivingLicense> createState() =>
-      _DrivingLicenseState();
+  State<DrivingLicense> createState() => _DrivingLicenseState();
 }
 
 class _DrivingLicenseState extends State<DrivingLicense> {
@@ -16,11 +16,11 @@ class _DrivingLicenseState extends State<DrivingLicense> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
-      padding: const EdgeInsets.all(6),
+      height: 56.h,
+      padding: EdgeInsets.all(6.w),
       decoration: BoxDecoration(
         color: AppColor.secondary,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(30.r),
       ),
       child: Stack(
         children: [
@@ -29,11 +29,11 @@ class _DrivingLicenseState extends State<DrivingLicense> {
             alignment:
             isYesSelected ? Alignment.centerLeft : Alignment.centerRight,
             child: Container(
-              width: 140,
-              height: 45,
+              width: 140.w,
+              height: 45.h,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(25.r),
               ),
             ),
           ),
@@ -52,7 +52,7 @@ class _DrivingLicenseState extends State<DrivingLicense> {
                         color: isYesSelected
                             ? AppColor.buttonColor
                             : AppColor.textLight,
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -72,7 +72,7 @@ class _DrivingLicenseState extends State<DrivingLicense> {
                         color: !isYesSelected
                             ? AppColor.buttonColor
                             : AppColor.textLight,
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/colors.dart';
 import '../widgets/curved_continer.dart';
 import '../widgets/custom_button.dart';
@@ -7,15 +8,12 @@ import 'ResetPassword.dart';
 import 'package:four_wheels/models/VerifyCode_model.dart';
 import 'package:four_wheels/services/AuthService.dart';
 
-
 class VerificationCodeScreen extends StatefulWidget {
   final String email;
-
 
   const VerificationCodeScreen({
     super.key,
     required this.email,
-
   });
 
   @override
@@ -36,7 +34,6 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
   final focus4 = FocusNode();
   final focus5 = FocusNode();
   final focus6 = FocusNode();
-
 
   String? errorText;
 
@@ -72,11 +69,11 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
     FocusNode? nextFocus,
   }) {
     return Container(
-      width: 50,
-      height: 55,
+      width: 50.w,
+      height: 55.h,
       decoration: BoxDecoration(
         color: AppColor.backtxt,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
       ),
       child: TextField(
         controller: controller,
@@ -85,7 +82,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
         textAlign: TextAlign.center,
         maxLength: 1,
         style: GoogleFonts.poppins(
-          fontSize: 24,
+          fontSize: 24.sp,
           fontWeight: FontWeight.w700,
           color: AppColor.primary,
         ),
@@ -119,38 +116,38 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
             left: 0,
             right: 0,
             child: SizedBox(
-              height: 260,
+              height: 260.h,
               child: Stack(
                 children: [
                   Positioned(
-                    top: 85,
+                    top: 85.h,
                     right: 0,
                     child: Image.asset(
                       "assets/images/car.png",
-                      width: 497,
-                      height: 277,
+                      width: 497.w,
+                      height: 277.h,
                       fit: BoxFit.fill,
                     ),
                   ),
                   Positioned(
-                    top: 70,
-                    left: 35,
+                    top: 70.h,
+                    left: 35.w,
                     child: Column(
                       children: [
                         Text(
                           "Four Wheels",
                           style: GoogleFonts.poppins(
                             color: Colors.white,
-                            fontSize: 40,
+                            fontSize: 40.sp,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h),
                         Text(
                           "L U X U R Y   I N   M O T I O N",
                           style: GoogleFonts.poppins(
                             color: AppColor.textGrey,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             letterSpacing: 3,
                           ),
                         ),
@@ -163,35 +160,35 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
           ),
 
           Positioned(
-            top: 190,
+            top: 190.h,
             left: 0,
             right: 0,
             child: CustomTopContainer(
               width: double.infinity,
-              height: 804,
+              height: 804.h,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 22),
+                padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 22.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Verification Code",
                       style: GoogleFonts.poppins(
-                        fontSize: 28,
+                        fontSize: 28.sp,
                         fontWeight: FontWeight.w800,
                         color: AppColor.txtColor2,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Text(
                       "Enter the 6-digit code sent to\n${widget.email}",
                       style: GoogleFonts.manrope(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         color: AppColor.iconColor,
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30.h),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -214,10 +211,12 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                         otpBox(
                           controller: code4Controller,
                           focusNode: focus4,
+                          nextFocus: focus5,
                         ),
                         otpBox(
                           controller: code5Controller,
                           focusNode: focus5,
+                          nextFocus: focus6,
                         ),
                         otpBox(
                           controller: code6Controller,
@@ -226,24 +225,25 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
 
                     if (errorText != null)
                       Text(
                         errorText!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.red,
-                          fontSize: 12,
+                          fontSize: 12.sp,
                         ),
                       ),
 
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28.h),
 
                     Center(
                       child: CustomButton(
+                        textcolor: Colors.white,
                         text: "Verify",
-                        width: 290,
-                        height: 58,
+                        width: 290.w,
+                        height: 58.h,
                         icon: Icons.arrow_forward,
                         onTap: () async {
                           if (fullCode.length != 6) {
@@ -259,14 +259,14 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
 
                           final verifyData = VerifyCodeModel(
                             email: widget.email,
-                            code: fullCode
+                            code: fullCode,
                           );
 
                           final result = await AuthService.verifyCode(verifyData);
 
-                          if (result['success'] == true ) {
+                          if (result['success'] == true) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(result['message']?? 'success verfication')),
+                              SnackBar(content: Text(result['message'] ?? 'success verfication')),
                             );
 
                             Navigator.push(
@@ -275,20 +275,19 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                                 builder: (_) => ResetPasswordScreen(
                                   email: widget.email,
                                   code: fullCode,
-                                  
                                 ),
                               ),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(result['message']?? "field verfication" )),
+                              SnackBar(content: Text(result['message'] ?? "field verfication")),
                             );
                           }
                         },
                       ),
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18.h),
 
                     Center(
                       child: GestureDetector(
@@ -299,7 +298,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                           "← BACK",
                           style: GoogleFonts.manrope(
                             color: AppColor.textHint,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             letterSpacing: 1.2,
                             fontWeight: FontWeight.w600,
                           ),
@@ -311,11 +310,11 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
 
                     Center(
                       child: Container(
-                        width: 95,
-                        height: 4,
+                        width: 95.w,
+                        height: 4.h,
                         decoration: BoxDecoration(
                           color: AppColor.primary,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                         ),
                       ),
                     ),

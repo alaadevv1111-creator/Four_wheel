@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:four_wheels/models/ResetPassword_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
@@ -64,18 +65,18 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     confirmPasswordController.dispose();
     super.dispose();
   }
+
   void saveNewPassword() {
     if (_formKey.currentState!.validate()) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => const LoginScreen(),
+          builder: (_) => LoginScreen(),
         ),
             (route) => false,
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,31 +91,29 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             color: AppColor.backgroundcolor,
           ),
 
-
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: SizedBox(
-              height: 400,
+              height: 400.h,
               child: Stack(
                 children: [
 
                   Positioned(
-                    top: 150,
+                    top: 150.h,
                     right: 0,
                     child: Image.asset(
                       "assets/images/car.png",
-                      width: 513,
-                      height: 286,
+                      width: 513.w,
+                      height: 286.h,
                       fit: BoxFit.fill,
                     ),
                   ),
 
-
                   Positioned(
-                    top: 155,
-                    left: 35,
+                    top: 155.h,
+                    left: 35.w,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -122,16 +121,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           "Four Wheels",
                           style: GoogleFonts.poppins(
                             color: Colors.white,
-                            fontSize: 40,
+                            fontSize: 40.sp,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        const SizedBox(height: 3),
+                        SizedBox(height: 3.h),
                         Text(
                           "L U X U R Y   I N   M O T I O N",
                           style: GoogleFonts.poppins(
                             color: AppColor.textGrey,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             letterSpacing: 3,
                           ),
                         ),
@@ -143,158 +142,151 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
           ),
 
+          Positioned(
+            top: 290.h,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: CustomTopContainer(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height - 350.h,
 
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 28.w, vertical: 24.h),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-      Positioned(
-        top: 290,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: CustomTopContainer(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height-350,
-
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 28, vertical: 24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    Text(
-                      "Create new password",
-                      style: GoogleFonts.poppins(
-                        fontSize: 27,
-                        fontWeight: FontWeight.w800,
-                        color: AppColor.txtColor2,
+                      Text(
+                        "Create new password",
+                        style: GoogleFonts.poppins(
+                          fontSize: 27.sp,
+                          fontWeight: FontWeight.w800,
+                          color: AppColor.txtColor2,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Create a strong password for\n${widget.email}",
-                      style: GoogleFonts.manrope(
-                        fontSize: 15,
-                        color: AppColor.iconColor,
-                        height: 1.5,
+                      SizedBox(height: 10.h),
+                      Text(
+                        "Create a strong password for\n${widget.email}",
+                        style: GoogleFonts.manrope(
+                          fontSize: 15.sp,
+                          color: AppColor.iconColor,
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      "NEW PASSWORD",
-                      style: GoogleFonts.manrope(
-                        fontSize: 12,
-                        color: AppColor.textLight,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.4,
+                      SizedBox(height: 24.h),
+                      Text(
+                        "NEW PASSWORD",
+                        style: GoogleFonts.manrope(
+                          fontSize: 12.sp,
+                          color: AppColor.textLight,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.4,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    CustomTextField(
-                      hint: "........",
-                      width: double.infinity,
-                      height: 64,
-                      isPassword: true,
-                      icon: Icons.lock_outline,
-                      controller: passwordController,
-                      validator: validatePassword,
-                      keyboardType: TextInputType.visiblePassword,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      "CONFIRM PASSWORD",
-                      style: GoogleFonts.manrope(
-                        fontSize: 12,
-                        color: AppColor.textLight,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.4,
+                      SizedBox(height: 10.h),
+                      CustomTextField(
+                        hint: "........",
+                        width: double.infinity,
+                        height: 64.h,
+                        isPassword: true,
+                        icon: Icons.lock_outline,
+                        controller: passwordController,
+                        validator: validatePassword,
+                        keyboardType: TextInputType.visiblePassword,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    CustomTextField(
-                      hint: "........",
-                      width: double.infinity,
-                      height: 64,
-                      isPassword: true,
-                      icon: Icons.verified_user_outlined,
-                      controller: confirmPasswordController,
-                      validator: validateConfirmPassword,
-                      keyboardType: TextInputType.visiblePassword,
-                    ),
-                    const SizedBox(height: 28),
+                      SizedBox(height: 16.h),
+                      Text(
+                        "CONFIRM PASSWORD",
+                        style: GoogleFonts.manrope(
+                          fontSize: 12.sp,
+                          color: AppColor.textLight,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.4,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      CustomTextField(
+                        hint: "........",
+                        width: double.infinity,
+                        height: 64.h,
+                        isPassword: true,
+                        icon: Icons.verified_user_outlined,
+                        controller: confirmPasswordController,
+                        validator: validateConfirmPassword,
+                        keyboardType: TextInputType.visiblePassword,
+                      ),
+                      SizedBox(height: 28.h),
 
-                    Center(
-                      child: CustomButton(
-                        text: "Save Password",
-                        width: 290,
-                        height: 58,
-                        icon: Icons.arrow_forward,
+                      Center(
+                        child: CustomButton(
+                          textcolor: Colors.white,
+                          text: "Save Password",
+                          width: 290.w,
+                          height: 58.h,
+                          icon: Icons.arrow_forward,
                           onTap: () async {
-                    if (_formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate()) {
+                              final user = ResetPasswordModel(
+                                email: widget.email,
+                                code: widget.code,
+                                password: passwordController.text.trim(),
+                                passwordConfirmation: confirmPasswordController.text.trim(),
+                              );
 
-                    final user = ResetPasswordModel(
-                    email: widget.email,
-                    code: widget.code,
-                    password: passwordController.text.trim(),
-                    passwordConfirmation: confirmPasswordController.text.trim(),
-                    );
+                              final result = await AuthService.resetPassword(user);
 
-                    final result = await AuthService.resetPassword(user);
+                              if (result['success'] == true) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(result['message'] ?? "success reset")),
+                                );
 
-                    if (result['success'] == true) {
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(result['message']??"success reset")),
-                    );
-
-                    Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                    builder: (_) => LoginScreen(),
-                    ),
-                    (route) => false,
-                    );
-
-                    } else {
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(result['message']?? "filed reset")),
-                    );
-
-                    }
-                    }
-                    },
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginScreen(),
+                                  ),
+                                      (route) => false,
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(result['message'] ?? "filed reset")),
+                                );
+                              }
+                            }
+                          },
+                        ),
                       ),
-                    ),
 
-                    const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "← BACK",
-                          style: GoogleFonts.manrope(
-                            color: AppColor.textHint,
-                            fontSize: 14,
-                            letterSpacing: 1.2,
-                            fontWeight: FontWeight.w600,
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "← BACK",
+                            style: GoogleFonts.manrope(
+                              color: AppColor.textHint,
+                              fontSize: 14.sp,
+                              letterSpacing: 1.2,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-          ),
-        ),
-
-      )],
-        ),
-      );
-
-    }
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

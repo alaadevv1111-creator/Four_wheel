@@ -30,14 +30,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  dotted_border: ^3.1.0
+  file_picker: ^8.1.7
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.7
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.8
   http: ^1.2.1
   google_sign_in: ^7.2.0
-
+  get: ^4.7.3
+  image_picker: ^1.2.2
+  quickalert: ^1.1.0
+  flutter_screenutil: ^5.9.3
 
 flutter:
   uses-material-design: true
@@ -45,7 +49,37 @@ flutter:
     - assets/images/car.png
     - assets/images/logo.png
     - assets/images/car2.png
-
+    - assets/images/wave.png
+    - assets/images/iconwave.png
+    - assets/images/Porsche.png
+    - assets/images/Tesla.png
+    - assets/images/dashbordico.png
+    - assets/images/iconcar.png
+    - assets/images/employyIcon.png
+    - assets/images/partsicon.png
+    - assets/images/rentlsIcon.png
+    - assets/images/contentico.png
+    - assets/images/performanceico.png
+    - assets/images/perico2.png
+    - assets/images/star.png
+    - assets/images/credentelsico.png
+    - assets/images/adminProfile.png
+    - assets/images/uplodico.png
+    - assets/images/TeslaModelDet.png
+    - assets/images/taslacarmangment.png
+    - assets/icons/icorangepower.png
+    - assets/icons/icocomplete.png
+    - assets/icons/priceico.png
+    - assets/icons/repetico.png
+    - assets/icons/plusico.png
+    - assets/images/Addcar.png
+    - assets/icons/icoplate.png
+    - assets/icons/icolight.png
+    - assets/icons/icocomplete.png
+    - assets/icons/icoclender.png
+    - assets/icons/categoryico.png
+    - assets/icons/icotimer.png
+    - assets/icons/icomph.png
 
 dev_dependencies:
   flutter_test:

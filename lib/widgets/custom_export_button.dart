@@ -14,39 +14,31 @@ class CustomExportButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding:  EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: AppColor.colorbackexport,
-              blurRadius: 10,
-              offset:Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-             Icon(
-              Icons.download_outlined,
-              size: 16,
-              color: AppColor.txtColor2,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              "Export PDF",
-              style: GoogleFonts.manrope(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColor.txtColor2,
+      child: Align(
+            alignment: Alignment.centerLeft,
+            child: IntrinsicWidth(
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Color(0xffE6E8EA),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.download_outlined, size: 14),
+                      SizedBox(width: 5),
+                      Text("Export PDF"),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
-      ),
+          )
+
     );
   }
 }

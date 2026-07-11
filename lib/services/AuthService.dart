@@ -126,6 +126,7 @@ class AuthService {
         'data': data,
       };
     }catch(e){
+
       return{
         'success': false,
         'massage': 'connection error',
@@ -304,6 +305,11 @@ class AuthService {
         'data': null
       };
     }
+  }
+  static void clearLocalAuth() {
+    token = null;
+    // userRole = null;
+    print(" Auth memory cleared: Token and Role are now null");
   }
 
   static Map<String, dynamic> _Decode(String body) {

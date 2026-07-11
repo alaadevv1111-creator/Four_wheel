@@ -10,13 +10,15 @@ class CustomMainContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: AppColor.txtColor2,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: child,
-      ),
+
+      return Container(
+        width: double.infinity,
+        color: AppColor.white2,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: child,
+        ),
+
     );
   }
 }

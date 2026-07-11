@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:four_wheels/screens/dash_bord.dart';
 import 'package:four_wheels/screens/register_step1.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:four_wheels/controller/auth_controller.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
@@ -15,50 +17,17 @@ import 'package:four_wheels/models/GoogleAuth_model.dart';
 import 'package:four_wheels/services/google_auth.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  String? validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Email is required';
-    }
-
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(value.trim())) {
-      return 'Invalid email';
-    }
-
-    return null;
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Password is required';
-    }
-
-    if (value.length < 8) {
-      return 'Password must length > 8';
-    }
-
-    final passwordRegex = RegExp(
-      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$',
-    );
-
-    if (!passwordRegex.hasMatch(value)) {
-      return 'Password must contain:\nUppercase, lowercase, number & symbol';
-    }
-
-    return null;
-  }
+  final AuthController authController =
+  Get.isRegistered<AuthController>()
+      ? Get.find<AuthController>()
+      : Get.put(AuthController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -77,23 +46,23 @@ class _LoginScreenState extends State<LoginScreen> {
             left: 0,
             right: 0,
             child: SizedBox(
-              height: 400,
+              height: 400.h,
               child: Stack(
                 children: [
                   Positioned(
-                    top: 110,
+                    top: 110.h,
                     right: 0,
                     child: Image.asset(
                       "assets/images/car.png",
-                      width: 513,
-                      height: 286,
+                      width: 513.w,
+                      height: 286.h,
                       fit: BoxFit.fill,
                     ),
                   ),
 
                   Positioned(
-                    top: 80,
-                    left: 35,
+                    top: 80.h,
+                    left: 35.w,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -101,16 +70,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           "Four Wheels",
                           style: GoogleFonts.poppins(
                             color: Colors.white,
-                            fontSize: 40,
+                            fontSize: 40.sp,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        const SizedBox(height: 13),
+                        SizedBox(height: 13.h),
                         Text(
                           "L U X U R Y   I N   M O T I O N",
                           style: GoogleFonts.poppins(
                             color: AppColor.textGrey,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             letterSpacing: 3,
                           ),
                         ),
@@ -123,259 +92,182 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
 
           Positioned(
-            top: 230,
+            top: 230.h,
             left: 0,
             right: 0,
             bottom: 0,
             child: CustomTopContainer(
               width: double.infinity,
-              height: 700,
-              child:SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 22),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Welcome Back",
-                      style: GoogleFonts.poppins(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        color: AppColor.txtColor2,
+              height: 700.h,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 22.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Welcome Back",
+                        style: GoogleFonts.poppins(
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.w800,
+                          color: AppColor.txtColor2,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Please enter your details to access your fleet.",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        color: AppColor.iconColor,
-                        height: 1.5,
+                      SizedBox(height: 8.h),
+                      Text(
+                        "Please enter your details to access your fleet.",
+                        style: GoogleFonts.poppins(
+                          fontSize: 16.sp,
+                          color: AppColor.iconColor,
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Email Address",
-                            style: GoogleFonts.manrope(
-                              fontSize: 12,
-                              color: AppColor.textLight,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1.4,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-
-                          CustomTextField(
-                            hint: "example@gmail.com",
-                            width: 326,
-                            height: 64,
-                            icon: Icons.email_outlined,
-                            controller: emailController,
-                            validator: validateEmail,
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          Text(
-                            "PASSWORD",
-                            style: GoogleFonts.manrope(
-                              fontSize: 12,
-                              color: AppColor.textLight,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1.4,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-
-                          CustomTextField(
-                            hint: ".............",
-                            width: 326,
-                            height: 64,
-                            icon: Icons.lock_outline,
-                            isPassword: true,
-                            controller: passwordController,
-                            validator: validatePassword,
-                            keyboardType: TextInputType.visiblePassword,
-                          ),
-
-                          const SizedBox(height: 6),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ForgotPasswordScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "Forgot password?",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    color: AppColor.primary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                      Form(
+                        key: authController.loginFormKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Email Address",
+                              style: GoogleFonts.manrope(
+                                fontSize: 12.sp,
+                                color: AppColor.textLight,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.4,
                               ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 14),
-
-                          Center(
-                            child: CustomButton(
-                              text: "Login",
-                              width: 326,
-                              height: 64,
-                              icon: Icons.arrow_forward,
-                              onTap: () async {
-                                if (_formKey.currentState?.validate() ?? false) {
-                                  final user = LoginModel(
-                                    email: emailController.text.trim(),
-                                    password: passwordController.text.trim(),
-                                  );
-
-                                  final result = await AuthService.login(user);
-
-                                  if (result['success'] == true) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(result['message'] ?? 'success'),
-                                      ),
-                                    );
-
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => DashbordScreen(),
-                                      ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(result['message'] ?? 'failed'),
-                                      ),
-                                    );
-                                  }
-                                }
-                              },
                             ),
-                          ),
+                            SizedBox(height: 10.h),
 
-                          const SizedBox(height: 8),
+                            CustomTextField(
+                              hint: "example@gmail.com",
+                              width: 326.w,
+                              height: 64.h,
+                              icon: Icons.email_outlined,
+                              controller: authController.loginEmailController,
+                              validator: authController.validateEmail,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
 
-                          Center(
-                            child: Text("----------------------------- or ------------------------------"),),
-                          const SizedBox(height: 4,),
+                            SizedBox(height: 20.h),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SocialButton(
-                                icon: Icons.g_mobiledata,
-                                text: "Google",
-                                onTap: () async {
-                                  final token =
-                                  await GoogleAuthService.signInAndGetIdToken();
-
-                                  if (token == null) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Google sign-in failed'),
-                                      ),
-                                    );
-                                    return;
-                                  }
-
-                                  final user = GoogleAuthModel(token: token);
-
-                                  final result = await AuthService.googleLogin(user);
-
-                                  if (result['success'] == true) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(result['message'] ?? 'success'),
-                                      ),
-                                    );
-
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => DashbordScreen(),
-                                      ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(result['message'] ?? 'failed'),
-                                      ),
-                                    );
-                                  }
-                                },
+                            Text(
+                              "PASSWORD",
+                              style: GoogleFonts.manrope(
+                                fontSize: 12.sp,
+                                color: AppColor.textLight,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.4,
                               ),
-                            ],
-                          ),
+                            ),
+                            SizedBox(height: 10.h),
 
-                          const SizedBox(height: 20),
+                            CustomTextField(
+                              hint: ".............",
+                              width: 326.w,
+                              height: 64.h,
+                              icon: Icons.lock_outline,
+                              isPassword: true,
+                              controller: authController.loginPasswordController,
+                              validator: authController.validatePassword,
+                              keyboardType: TextInputType.visiblePassword,
+                            ),
 
-                          Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            SizedBox(height: 6.h),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(
-                                  "Dont have an account ? ",
-                                  style: GoogleFonts.poppins(
-                                    color: AppColor.textHint,
-                                    fontSize: 14,
-                                  ),
-                                ),
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => RegisterStep1(),
-                                      ),
-                                    );
+                                    Get.to(() => ForgotPasswordScreen());
                                   },
                                   child: Text(
-                                    "SignUp",
+                                    "Forgot password?",
                                     style: GoogleFonts.poppins(
+                                      fontSize: 13.sp,
                                       color: AppColor.primary,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
-
                               ],
                             ),
-                          ),
 
+                            SizedBox(height: 14.h),
 
-                        ],
+                            Center(
+                              child: CustomButton(
+                                textcolor: Colors.white,
+                                text: "Login",
+                                width: 326.w,
+                                height: 64.h,
+                                icon: Icons.arrow_forward,
+                                onTap: authController.login,
+                              ),
+                            ),
+
+                            SizedBox(height: 8.h),
+
+                            Center(
+                              child: Text(
+                                "----------------------------- or ------------------------------",
+                              ),
+                            ),
+                            SizedBox(height: 4.h),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SocialButton(
+                                  icon: Icons.g_mobiledata,
+                                  text: "Google",
+                                  onTap: authController.googleLogin,
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 20.h),
+
+                            Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Dont have an account ? ",
+                                    style: GoogleFonts.poppins(
+                                      color: AppColor.textHint,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => RegisterStep1());
+                                    },
+                                    child: Text(
+                                      "SignUp",
+                                      style: GoogleFonts.poppins(
+                                        color: AppColor.primary,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
           ),
         ],
       ),
     );
   }
 }
-

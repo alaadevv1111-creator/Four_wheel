@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constants/colors.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:four_wheels/widgets/curved_continer.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
@@ -43,29 +43,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
       body: Stack(
         children: [
-
-          /// 🔵 الخلفية
           Container(
             width: double.infinity,
             height: double.infinity,
             color: AppColor.backgroundcolor,
           ),
 
-          /// 🔝 اللوجو (اختياري)
           Positioned(
-            top: 60,
+            top: 60.h,
             left: 0,
             right: 0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('assets/images/logo.png', height: 120,width: 200,),
-                const SizedBox(height: 5),
+                Image.asset('assets/images/logo.png', height: 120.h, width: 200.w),
+                SizedBox(height: 5.h),
                 Text(
                   "FOUR WHEELS",
                   style: GoogleFonts.manrope(
                     color: AppColor.white2,
-                    fontSize: 40,
+                    fontSize: 40.sp,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -73,7 +70,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
 
-          /// ⚪ الكونتينر الجاهز
           Positioned(
             bottom: 0,
             left: 0,
@@ -83,8 +79,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               height: MediaQuery.of(context).size.height * 0.6,
 
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 28, vertical: 24),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 28.w, vertical: 24.h),
 
                 child: Form(
                   key: _formKey,
@@ -92,30 +88,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-                      /// العنوان
                       Text(
                         "Forgot Password",
                         style: GoogleFonts.poppins(
-                          fontSize: 24,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColor.primary,
                         ),
                       ),
 
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
 
                       Text(
                         "Enter your email to receive reset code",
                         style: GoogleFonts.manrope(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           color: AppColor.iconColor,
                         ),
                       ),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30.h),
 
-                      /// Email Field
                       CustomTextField(
                         hint: "example@email.com",
                         controller: emailController,
@@ -124,57 +117,55 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         icon: Icons.email_outlined,
                       ),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30.h),
 
-                      /// Button
                       Center(
                         child: CustomButton(
+                          textcolor: Colors.white,
                           text: "Send Code",
-                          width: 220,
-                          height: 60,
+                          width: 220.w,
+                          height: 60.h,
                           icon: Icons.arrow_forward,
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final emailData = CheckEmailModel(
+                                email: emailController.text.trim(),
+                              );
 
-                            onTap: () async {
-                              if (_formKey.currentState!.validate()) {
-                                final emailData = CheckEmailModel(
+                              final checkResult = await AuthService.checkEmail(emailData);
+
+                              if (checkResult['success'] == true) {
+                                final forgotData = ForgotPasswordModel(
                                   email: emailController.text.trim(),
                                 );
 
-                                final checkResult = await AuthService.checkEmail(emailData);
+                                final forgotResult = await AuthService.forgotPassword(forgotData);
 
-                                if (checkResult['success'] == true) {
-                                  final forgotData = ForgotPasswordModel(
-                                    email: emailController.text.trim(),
+                                if (forgotResult['success'] == true) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(forgotResult['message'] ?? "success forgot")),
                                   );
 
-                                  final forgotResult = await AuthService.forgotPassword(forgotData);
-
-                                  if (forgotResult['success'] == true) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(forgotResult['message']?? "success forgot")),
-                                    );
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => VerificationCodeScreen(
-                                          email: emailController.text.trim(),
-                                        ),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => VerificationCodeScreen(
+                                        email: emailController.text.trim(),
                                       ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(forgotResult['message']?? "filed forgot")),
-                                    );
-                                  }
+                                    ),
+                                  );
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(checkResult['message']?? "filed check")),
+                                    SnackBar(content: Text(forgotResult['message'] ?? "filed forgot")),
                                   );
                                 }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(checkResult['message'] ?? "filed check")),
+                                );
                               }
-                            },
-
+                            }
+                          },
                         ),
                       ),
                     ],
@@ -188,21 +179,3 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 }
-//    final result = await AuthService.forgotPassword(
-//                                 emailController.text.trim(),
-//                               );
-//
-//                               if (result['success']) {
-//                                 Navigator.push(
-//                                   context,
-//                                   MaterialPageRoute(
-//                                     builder: (_) => VerificationCodeScreen(
-//                                       email: emailController.text.trim(),
-//                                     ),
-//                                   ),
-//                                 );
-//                               } else {
-//                                 ScaffoldMessenger.of(context).showSnackBar(
-//                                   SnackBar(content: Text(result['message'])),
-//                                 );
-//                               }
